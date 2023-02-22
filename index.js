@@ -1,7 +1,7 @@
 function draw (){
     // Set up the dimensions of the chart
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+  const width = 400;
+  const height = 400;
 const data = {
     name: "Yotam",
     children: [
@@ -29,6 +29,14 @@ const data = {
     // .sort((a, b) => b.value - a.value)
     )
 
+    const zoomConfig = d3.zoom()
+    .extent([
+      [0, 0],
+      [width, height],
+    ])
+    .on("zoom", zoom);
+
+
 const color = d3.scaleLinear()
 .domain([0, 5])
 .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
@@ -40,13 +48,12 @@ const color = d3.scaleLinear()
   const svg = d3.select('#chart')
   .append('svg')
       .attr("viewBox", `-${width/2} -${height/2} ${width} ${height}`)
-      // .attr('height',height)
-      // .attr('width',width)
+      .attr('height',height)
+      .attr('width',width)
       .style("display", "block")
       .style("margin", "0 -14px")
       .style("background", color(0))
       .style("cursor", "pointer")
-      .on("click", (event) => zoom(event, root));
 
   const node = svg.append("g")
     .selectAll("circle")
@@ -68,8 +75,10 @@ const color = d3.scaleLinear()
       .attr("pointer-events", d => !d.children ? "none" : null)
       .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
       .on("mouseout", function() { d3.select(this).attr("stroke", null); })
-      .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
+      // .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
 // console.log(node.datum());
+    node.call(zoomConfig)
+
   const label = svg.append("g")
       .style("font", "10px sans-serif")
       .attr("pointer-events", "none")
@@ -93,12 +102,13 @@ const color = d3.scaleLinear()
     node.attr("r", d => d.r * k);
   }
 
-  function zoom(event, d) {
+  function zoom1(event, d) {
+    console.log(this)
     const focus0 = focus;
     focus = d;
     
     
-    // console.dir(focus);
+    console.log(`focus is ${d.data.name}`,focus);
 
     const transition = svg.transition()
         .duration(event.altKey ? 7500 : 750)
@@ -132,11 +142,52 @@ const color = d3.scaleLinear()
           return 1
         }
         else{ return 0}})
+
+
         
-      
-        // .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-        // .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
-      // .style("display", d => d.depth === focus.depth ? 'none' : "block")
+  }
+  function zoom(event, d) {
+    const focus0 = focus;
+    focus = d;
+    
+    
+    console.log(`focus is ${d.data.name}`,focus);
+
+    const transition = svg.transition()
+        .duration(event.altKey ? 7500 : 750)
+        .tween("zoom", d => {
+          const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+          return t => zoomTo(i(t));
+        });
+
+    label
+      .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+      .transition(transition)
+        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+        // console.log("focusD",focus);
+        node
+      .attr("pointer-events", d => {if(!d.children){
+        return 'none'
+      } else if (d.depth >= focus.depth+2){
+        return 'none'
+      } else { return null}
+    })
+        .style("fill-opacity", d => {
+          // console.log("Dd",d.depth);
+          if(d.parent === focus)
+          { 
+            return 1}
+        else if(d.parent.depth === focus.depth-1){
+          return 1
+        } else if(d.depth === focus.depth-1){
+          return 1
+        }
+        else{ return 0}})
+
+
+        
   }
 
 
