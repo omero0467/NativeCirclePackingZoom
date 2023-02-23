@@ -1,7 +1,7 @@
 function draw (){
     // Set up the dimensions of the chart
-  const width = 400;
-  const height = 400;
+  const width = 900;
+  const height = 900;
 const data = {
     name: "Yotam",
     children: [
@@ -135,7 +135,8 @@ const color = d3.scaleLinear()
           // console.log("Dd",d.depth);
           if(d.parent === focus)
           { 
-            return 1}
+            return 1
+          }
         else if(d.parent.depth === focus.depth-1){
           return 1
         } else if(d.depth === focus.depth-1){
@@ -148,7 +149,13 @@ const color = d3.scaleLinear()
   }
   function zoom(event, d) {
     const focus0 = focus;
-    focus = d;
+    // event.sourceEvent.stopPropagation()
+   if (focus !==d) {
+     focus = d;
+   } else {
+    focus=d.parent
+   }
+    
     
     
     console.log(`focus is ${d.data.name}`,focus);
@@ -174,6 +181,7 @@ const color = d3.scaleLinear()
         return 'none'
       } else { return null}
     })
+    .transition(transition)
         .style("fill-opacity", d => {
           // console.log("Dd",d.depth);
           if(d.parent === focus)
