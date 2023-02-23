@@ -1,29 +1,15 @@
-function draw (){
+async function draw (){
     // Set up the dimensions of the chart
   const width = 900;
   const height = 900;
-const data = {
-    name: "Yotam",
-    children: [
-      {
-        name: "R&D",
-        children: [{name:'Segev',value:5},{name:'Yonatan',value:5}],
-      },
-      { name: "Product",
-       children: [{name:"Juan",value:5}, {name:"Jorje",value:5}
-                ,{name:"Juan",value:5}, {name:"Jorje",value:5}]},
-      {
-        name: "Analysts",
-        children: [{name:"Dan",children:[{name:'Avi',value:5},{name:'Avi',value:5}]}, {name:"Amir",value:5}],
-      },
-    ],
-  };  
-
+const data = await d3.json('data.json')
 
   const pack = data => d3.pack()
     .size([width, height])
-    .padding(3)
-    .radius(d=>d.children? d.children.length:5)
+    .padding(2)
+    .radius(d=>
+      // d.children?d.children.length:
+      5)
   (d3.hierarchy({children:[data]})
     // .sum(d => d.value)
     // .sort((a, b) => b.value - a.value)
@@ -34,16 +20,17 @@ const data = {
       [0, 0],
       [width, height],
     ])
-    .on("zoom", zoom);
+    .on("zoom", zoom)
+    // .on("scroll", zoom);
 
+    const root = pack(data);
+    let focus = root;
+    let view;
 
 const color = d3.scaleLinear()
-.domain([0, 5])
+.domain([0, root.height])
 .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
 .interpolate(d3.interpolateHsl)
-  const root = pack(data);
-  let focus = root;
-  let view;
 
   const svg = d3.select('#chart')
   .append('svg')
@@ -72,7 +59,13 @@ const color = d3.scaleLinear()
       }
       else{ return 0}})
     //   .style("display", d => d.depth === focus.depth+1 ? 'block' : "block")
-      .attr("pointer-events", d => !d.children ? "none" : null)
+      // .attr("pointer-events", d => !d.children ? "none" : null)
+      .attr("pointer-events", d => {if(!d.children){
+        return 'none'
+      } else if (d.depth >= focus.depth+2){
+        return 'none'
+      } else { return null}
+    })
       .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
       .on("mouseout", function() { d3.select(this).attr("stroke", null); })
       // .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
@@ -149,10 +142,13 @@ const color = d3.scaleLinear()
   }
   function zoom(event, d) {
     const focus0 = focus;
-    // event.sourceEvent.stopPropagation()
+    event.sourceEvent.stopPropagation()
    if (focus !==d) {
      focus = d;
-   } else {
+   } else if(!d.children){
+    focus=d.parent
+   } 
+   else {
     focus=d.parent
    }
     

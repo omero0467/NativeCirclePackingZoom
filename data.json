@@ -1,0 +1,108 @@
+{
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "name": "Director Corporate Finance"
+                  },
+                  {
+                    "children": [],
+                    "name": "Director of Finance"
+                  }
+                ],
+                "name": "Director of Finance"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "name": "Global Controller"
+                      },
+                      {
+                        "children": [],
+                        "name": "Controller"
+                      }
+                    ],
+                    "name": "Controller"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "name": "Chief Financial Officer"
+                      },
+                      {
+                        "children": [],
+                        "name": "Chief Financial Officer & Board Secretary"
+                      }
+                    ],
+                    "name": "Chief Financial Officer"
+                  }
+                ],
+                "name": "Controller"
+              }
+            ],
+            "name": "Controller"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "name": "LPL Financial Advisor"
+                  },
+                  {
+                    "children": [],
+                    "name": "LPL FINANCIAL ADVISOR"
+                  }
+                ],
+                "name": "LPL FINANCIAL ADVISOR"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "name": "Principal Recruiter and Business Partner "
+                      },
+                      {
+                        "children": [],
+                        "name": "Principal People Business Partner"
+                      }
+                    ],
+                    "name": "Principal People Business Partner"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "name": "Interim Chief Executive Officer"
+                      },
+                      {
+                        "children": [],
+                        "name": "Chief Executive Officer"
+                      }
+                    ],
+                    "name": "Chief Executive Officer"
+                  }
+                ],
+                "name": "Chief Executive Officer"
+              }
+            ],
+            "name": "LPL FINANCIAL ADVISOR"
+          }
+        ],
+        "name": "Controller"
+      }
+    ],
+    "name": "Root1"
+  }

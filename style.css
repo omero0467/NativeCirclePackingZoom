@@ -3,3 +3,7 @@
     width: 900px;
     position: relative;
   }
+
+  body{
+    overflow-y: hidden;
+  }
